@@ -42,9 +42,7 @@ const tab_data = [{
 
 export const Consolas = () => {
     const [tab, setTab] = useState("portatiles");
-    const [isPending, startTransition] = useTransition();
-
-    
+    const [isPending, startTransition] = useTransition();    
     const { sessionData } = useContext(SessionContext);
 
     const handleTabChange = (id) => {
@@ -55,7 +53,7 @@ export const Consolas = () => {
 
     return (
             <section className='text-white'>
-                {sessionData.isLogged &&
+                {sessionData.name &&
             
                 <div className='md:grid md:grid-cols-2 gap-8 items-center py-8 px-4 xl:gap-16 sm:py-16 xl:px-16'>
                     <Image src='/images/consolas.jpg' alt='imagen cosolas' width={500} height={500} />

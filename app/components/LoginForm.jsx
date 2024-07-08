@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-
 const LoginForm = () => {
 
   const [username, setUserName] = useState("");
@@ -21,23 +20,12 @@ const LoginForm = () => {
         body: JSON.stringify({ username, password })
       })
       if (!res.ok){
+      //Recibimos el mensaje de error desde el servidor y lo mostramos en ventana modal.
         const err = await res.json()
         return setError(err.message)
       } 
-
       const data = await res.json()
-
-      //Guardamos el token para su posterior uso en otras request!
-      const userData = {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        rol: data.rol,
-        token: data.access_token,
-        isLogged: true
-      }
-      const objJson = JSON.stringify(userData)
-      localStorage.setItem('data', objJson)
+      localStorage.setItem('token', data.token)
 
       window.location.href = '/';
     } catch (error) {
@@ -69,7 +57,7 @@ const LoginForm = () => {
           <label htmlFor="password" className="block text-gray-500 font-semibold mb-2">Contraseña</label>
           <input type="password" onChange={(e) => setPassword(e.target.value)} id="password" name="password" className="border text-black border-gray-300 px-3 py-2 w-full rounded-md focus:outline-none focus:border-blue-500" />
         </div>
-        <div className="flex justify-between">
+        <div className="flex md:flex-row flex-col justify-between">
           <button type="submit" className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 focus:outline-none focus:bg-blue-600">Iniciar sesión</button>
           <button type="button"  className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md hover:bg-gray-400 focus:outline-none focus:bg-gray-400"><Link href={'/'}>Salir</Link></button>
         </div>

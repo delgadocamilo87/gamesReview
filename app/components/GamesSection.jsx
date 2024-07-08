@@ -179,60 +179,60 @@ export const GamesSection = () => {
 
     return (
         <>
-            {sessionData.isLogged &&
+            {sessionData.name &&
                 <h2 className='text-center text-4xl font-bold text-white mt-4 mb-8'>
                     Categorias y Juegos
                 </h2>}
             <div className='text-white justify-center items-center grid md:grid-cols-4 gap-3 md:gap-4 p-4 mb-8'>
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='Todos'
                         isSelected={tag === 'Todos'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='Accion'
                         isSelected={tag === 'Accion'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='Autos'
                         isSelected={tag === 'Autos'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='Aventura'
                         isSelected={tag === 'Aventura'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='FPS'
                         isSelected={tag === 'FPS'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='MMO'
                         isSelected={tag === 'MMO'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='Online'
                         isSelected={tag === 'Online'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='Survival'
                         isSelected={tag === 'Survival'}
                     />}
-                {sessionData.isLogged &&
+                {sessionData.name &&
                     <GamesTags
                         onClick={handdleTagChange}
                         name='RPG'
@@ -241,7 +241,7 @@ export const GamesSection = () => {
 
 
             </div>
-            {sessionData.isLogged &&
+            {sessionData.name &&
                 <div className='grid md:grid-cols-3 gap-8 md:gap-12'>
                     {displayedGames.map((game) => (
                         <GamesCard
@@ -256,7 +256,7 @@ export const GamesSection = () => {
                     ))}
                 </div>}
                 
-                {sessionData.isLogged && selectedGame && (
+                {sessionData.name && selectedGame && (
         <div>
         <GamesInfo
           id={selectedGame.id}
@@ -268,7 +268,7 @@ export const GamesSection = () => {
         </div>
       )}          
 
-            {sessionData.isLogged && !expanded && (
+            {sessionData.name && !expanded && (
                 <div className='flex justify-center mt-10'>
                     <button className='px-6 py-3 w-full sm:w-fit rounded-full mr-4 bg-gradient-to-br from-blue-500 via-purple-500 to-orange-300 border hover:border-pink-700 text-white'
                         onClick={() => setExpanded(true)}>
@@ -277,7 +277,7 @@ export const GamesSection = () => {
 
                 </div>
             )}
-            {sessionData.isLogged && expanded && (
+            {sessionData.name && expanded && (
                 <div className='flex justify-center mt-10'>
                     <button className='px-6 py-3 w-full sm:w-fit rounded-full mr-4 bg-gradient-to-br from-blue-500 via-purple-500 to-orange-300 border hover:border-pink-700 text-white'
                         onClick={() => setExpanded(false)}>
