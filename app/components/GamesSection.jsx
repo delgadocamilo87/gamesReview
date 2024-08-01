@@ -14,6 +14,7 @@ export const GamesSection = () => {
     const [loading, setLoading] = useState(true);
     const [displayedGames, setDisplayedGames] = useState([]);
     const [searchText, setSearchText] = useState('');
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -36,7 +37,7 @@ export const GamesSection = () => {
                 const filteredGames = data.filter(game =>
                     game.name.toLowerCase().includes(searchText.toLowerCase())
                 );
-    
+
                 setGames(filteredGames);
                 setDisplayedGames(expanded ? filteredGames : filteredGames.slice(0, 6));
             } catch (error) {
@@ -46,7 +47,7 @@ export const GamesSection = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
     }, [tag, expanded, userData?.token, searchText]);
 
@@ -60,28 +61,57 @@ export const GamesSection = () => {
     };
 
     const handleToggleExpand = () => {
-        setExpanded((prevExpanded) => !prevExpanded);
-        setDisplayedGames((prevGames) => (!expanded ? prevGames.slice(0, 6) : games));
+        setExpanded(prevExpanded => !prevExpanded);
+        setDisplayedGames(prevGames => (!expanded ? prevGames.slice(0, 6) : games));
     };
 
+    // const handleRatingUpdate = async () => {
+    //     const url = 'http://localhost:3000/video_games/';
+    //     const headers = {};
+    //     if (userData?.token) {
+    //         headers['Authorization'] = `Bearer ${userData.token}`;
+    //     }
+    //     try {
+    //         const response = await fetch(url, { headers });
+    //         if (!response.ok) {
+    //             throw new Error('Error al obtener los juegos');
+    //         }
+    //         const data = await response.json();
+    //         setGames(data);
+    //         setDisplayedGames(expanded ? data : data.slice(0, 6));
+    //     } catch (error) {
+    //         console.error('Error al actualizar los juegos:', error);
+    //     }
+    // };
+
+    const handleRatingUpdate = async (updatedGame) => {
+        setGames(prevGames =>
+            prevGames.map(game =>
+                game.id === updatedGame.id
+                    ? { ...game, averageRating: updatedGame.averageRating }
+                    : game
+            )
+        );
+        setDisplayedGames(expanded ? games : games.slice(0, 6));
+    };
     return (
         <>
-            {userData.name && (
+            {userData?.name && (
                 <>
                     <Category onTagChange={handleTagChange} selectedTag={tag} />
                     <h2 className='text-center text-4xl font-bold text-white mt-4 mb-8'>
                         Juegos
                     </h2>
-  {/* Buscador */}
-  <div className="flex justify-center mb-8">
-                    <input
-                        type="text"
-                        className="px-4 py-2 rounded-full border border-gray-300 text-black"
-                        placeholder="Buscar juegos..."
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                    />
-                </div> 
+                    {/* Buscador */}
+                    <div className="flex justify-center mb-8">
+                        <input
+                            type="text"
+                            className="px-4 py-2 rounded-full border border-gray-300 text-black"
+                            placeholder="Buscar juegos..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                        />
+                    </div>
                     {loading ? (
                         <div className="flex items-center justify-center min-h-screen">
                             <div className="w-16 h-16 border-4 border-blue-500 border-dotted rounded-full animate-spin"></div>
@@ -90,46 +120,44 @@ export const GamesSection = () => {
                         <div className='text-center text-white'>No hay juegos disponibles en esta categoría.</div>
                     ) : (
                         <>
-                            <div className='grid md:grid-cols-3 gap-8 md:gap-12'>
+                            <div className='grid md:grid-cols-3 gap-8 md:gap-12 px-4 md:px-8'>
                                 {displayedGames.map((game) => (
                                     <GamesCard
                                         key={game.id}
+                                        imgUrl={game.images}
                                         title={game.name}
                                         description={game.description}
-                                        imgUrl={game.images}
+                                        qualification={game.averageRating}
+                                        gameId={game.id}
                                         gameUrl={game.company?.siteUrl}
                                         onEyeClick={() => setSelectedGame(game)}
+                                        onRating={handleRatingUpdate} // Pasar handleRatingUpdate correctamente
                                     />
                                 ))}
                             </div>
+                            {selectedGame && (
+                                <GamesInfo
+                                    title={selectedGame.name}
+                                    description={selectedGame.description}
+                                    imgUrl={selectedGame.images}
+                                    qualification={selectedGame.averageRating}
+                                    onClose={handleCloseModal}
+                                />
+                            )}
+                            {userData?.name && games.length > 6 && !loading && (
+                                <div className='flex justify-center mt-8'>
+                                    <button
+                                        onClick={handleToggleExpand}
+                                        className='px-4 py-2 bg-blue-500 text-white rounded-full'
+                                    >
+                                        {expanded ? 'Ver menos' : 'Ver más'}
+                                    </button>
+                                </div>
+                            )}
                         </>
-                    )}
-
-                    {selectedGame && (
-                        <GamesInfo
-                            id={selectedGame.id}
-                            title={selectedGame.name}
-                            description={selectedGame.description}
-                            imgUrl={selectedGame.images}
-                            qualifications={selectedGame.qualification}
-                            onClose={handleCloseModal}
-                        />
-                    )}
-
-                    {userData?.name && games.length > 6 && !loading && (
-                        <div className='flex justify-center mt-10'>
-                            <button
-                                className='px-6 py-3 w-full sm:w-fit rounded-full mr-4 bg-gradient-to-br from-blue-500 via-purple-500 to-orange-300 border hover:border-pink-700 text-white'
-                                onClick={handleToggleExpand}
-                            >
-                                {expanded ? 'Ver menos' : 'Ver más'}
-                            </button>
-                        </div>
                     )}
                 </>
             )}
         </>
     );
 };
-
-export default GamesSection;
